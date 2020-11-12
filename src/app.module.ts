@@ -1,11 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmailsModule } from './emails/emails.module';
 
 @Module({
-  imports: [EmailsModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      url: 'mongodb://1.0.0.3/project-graphpl',
+      synchronize: true,
+      autoLoadEntities: true,
+      useUnifiedTopology: true,
+    }),
+    EmailsModule,
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+    }),
+  ],
 })
 export class AppModule {}
