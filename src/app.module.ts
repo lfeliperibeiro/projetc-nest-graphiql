@@ -7,7 +7,7 @@ import { EmailsModule } from './emails/emails.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: 'mongodb://1.0.0.3/project-graphpl',
+      url: 'mongodb://localhost:27017/project-graphql',
       synchronize: true,
       autoLoadEntities: true,
       useUnifiedTopology: true,
