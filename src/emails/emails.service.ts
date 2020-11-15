@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { validateOrReject } from 'class-validator';
-import { Repository } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { CreateEmailInput } from './dto/create-email.input';
 import { UpdateEmailInput } from './dto/update-email.input';
 import { Email } from './entities/email.entity';
@@ -9,7 +9,7 @@ import { Email } from './entities/email.entity';
 @Injectable()
 export class EmailsService {
   constructor(
-    @InjectRepository(Email) private emailRepository: Repository<Email>,
+    @InjectRepository(Email) private emailRepository: MongoRepository<Email>,
   ) {}
   async create(createEmailInput: CreateEmailInput): Promise<Email> {
     const createEmail = new Email();
@@ -33,7 +33,11 @@ export class EmailsService {
     return await this.emailRepository.save(updateEmail);
   }
 
-  async remove(email: string): Promise<void> {
-    await this.emailRepository.delete({ email });
+  async remove(email: string): Promise<Email> {
+    const deleteEmail = await this.emailRepository.findOneAndDelete({ email });
+    if (!deleteEmail.value) {
+      throw new NotFoundException();
+    }
+    return deleteEmail.value;
   }
 }

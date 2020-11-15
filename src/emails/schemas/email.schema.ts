@@ -1,7 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class Email {
+export class EmailSchema {
   @Field(() => String, { description: 'Email' })
   email: string;
 
