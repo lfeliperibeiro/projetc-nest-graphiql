@@ -38,7 +38,6 @@ export class EmailsResolver {
   async removeEmail(
     @Args('email', { type: () => String }) email: string,
   ): Promise<EmailSchema> {
-    await this.emailsService.remove(email);
-    return { email } as EmailSchema;
+    return await this.emailsService.remove(email);
   }
 }

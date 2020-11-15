@@ -28,6 +28,9 @@ export class EmailsService {
 
   async update({ email, name }: UpdateEmailInput): Promise<Email> {
     const updateEmail = await this.emailRepository.findOne({ email });
+    if (!updateEmail) {
+      throw new NotFoundException();
+    }
     updateEmail.name = name;
     await validateOrReject(updateEmail);
     return await this.emailRepository.save(updateEmail);
